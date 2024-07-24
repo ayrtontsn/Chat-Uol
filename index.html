@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Uol</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="reset.css" />
+</head>
+<body>
+    <div class="header">
+        <img class="imgs" src="imgs/uol.png"/>
+        <ion-icon class="contacts" name="people"></ion-icon>
+    </div>
+
+    <div class="footer">
+        <div class="message">
+            <input type="text" placeholder="Escreva aqui...">
+            <span>Enviando para Todos (Público)</span>
+        </div>
+        <ion-icon class="send" name="paper-plane-outline"></ion-icon>
+    </div>
+
+    <div class="menu hidden">
+        <div class="title">
+            Escolha um contato para enviar mensagem:
+        </div>
+        <div class="persons">
+            <div class="people">
+                <div class="name_menu">                
+                    <ion-icon class="send" name="people"></ion-icon>
+                    <h1>Todos</h1>
+                </div>
+                <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+            </div>
+            <div class="people">
+                <div class="name_menu">                
+                    <ion-icon class="send" name="person-circle"></ion-icon>
+                    <h1>joão</h1>
+                </div>
+                <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+            </div>
+        </div>
+        <div class="title">
+            Escolha a visibilidade:
+        </div>
+        <div class="destination">
+            <div class="people">
+                <div class="name_menu">                
+                    <ion-icon class="send" name="lock-open"></ion-icon>
+                    <h1>Público</h1>
+                </div>
+                <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+            </div>
+            <div class="people">
+                <div class="name_menu">                
+                    <ion-icon class="send" name="lock-closed"></ion-icon>
+                    <h1>Reservadamente</h1>
+                </div>
+                <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+            </div>
+        </div>
+    </div>
+    <div class="mask hidden"></div>
+
+
+    <script src="scripts.js"></script>
+    <script
+        type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js">
+    </script>
+    <script
+        nomodule
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js">
+    </script>
+</body>
+</html>
