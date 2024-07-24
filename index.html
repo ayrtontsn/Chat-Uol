@@ -10,8 +10,34 @@
 <body>
     <div class="header">
         <img class="imgs" src="imgs/uol.png"/>
-        <ion-icon class="contacts" name="people"></ion-icon>
+        <ion-icon class="contacts" name="people" onclick="show_menu()"></ion-icon>
     </div>
+
+    <div class="main">
+        <div class="chat all">
+            <h6 class="hour">(12:12:12)</h6>
+            <h6 class="name_chat">João</h6>
+            <h6>para</h6>
+            <h6 class="target">Todos:</h6>
+            <h6 class="post">Olá, bom dia!</h6>
+        </div>
+        <div class="chat priv">
+            <h6 class="hour">(12:12:12)</h6>
+            <h6 class="name_chat">João</h6>
+            <h6>para</h6>
+            <h6 class="target">Todos:</h6>
+            <h6 class="post">Olá, bom dia!</h6>
+        </div>
+        <div class="chat priv">
+            <h6 class="hour">(12:12:12)</h6>
+            <h6 class="name_chat">João</h6>
+            <h6>para</h6>
+            <h6 class="target">Todos:</h6>
+            <h6 class="post">Olá, bom dia!</h6>
+        </div>
+    </div>
+
+
 
     <div class="footer">
         <div class="message">
@@ -61,7 +87,7 @@
             </div>
         </div>
     </div>
-    <div class="mask hidden"></div>
+    <div class="mask hidden" onclick="hidden_menu()"></div>
 
 
     <script src="scripts.js"></script>
