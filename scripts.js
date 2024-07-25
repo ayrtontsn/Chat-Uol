@@ -2,7 +2,10 @@ const name = "João";
 let people_send = "Todos";
 let target_send = "Público";
 
+let msg_chat = [];
+let ul = document.querySelector("ul")
 
+let chat={}
 
 
 function show_menu(){
@@ -51,25 +54,115 @@ function people(click){
 
 function send(){
     const input = document.querySelector("input").value
-    const ul = document.querySelector("ul")
+    
+    today=new Date();
+    clock = today.toLocaleTimeString();
+   
+     
+    chat = {
+        type: "msg",
+        time: clock,
+        me: name,
+        privacity: target_send,
+        to: people_send,
+        msg: input
+    }
 
-    if (target_send === "Público"){
-        ul.innerHTML += `        
+    msg_chat.push(chat)
+    document.querySelector("input").value = ""
+    rendermsg()
+
+    // const promessa = axios.post('http://...', dados);
+    // promessa.then(processarResposta);
+}
+
+function in_out(){
+    today=new Date();
+    clock = today.toLocaleTimeString();
+   
+     
+    chat = {
+        type: "in_out",
+        time: clock,
+        me: name,
+        privacity: target_send,
+        to: people_send,
+        msg: ""
+    }
+    msg_chat.push(chat)
+    rendermsg()
+}
+
+function rendermsg(){
+    ul.innerHTML = "";
+    let msg = ""
+    
+    for(let i=0;i<msg_chat.length;i++){
+        if(msg_chat[i].type === "msg"){
+            msg = Message(msg_chat[i])
+        }
+        else{
+            msg = login(msg_chat[i])
+        }
+        ul.innerHTML += msg
+    }
+}
+
+function Message(info){
+    let msg = ``
+    if (info.privacity === "Público"){
+        msg = `        
                 <li>
                     <h6>
-                        <em>(12:12:12)</em> <strong>${name}</strong> para <strong>${people_send}</strong>: ${input}
+                        <em>(${info.time})</em> <strong>${info.me}</strong> para <strong>${info.to}</strong>: ${info.msg}
                     </h6>
                 </li>
                 `  
     }
     else{
-        ul.innerHTML += `        
+        msg = `        
         <li class="priv">
             <h6>
-                <em>(12:12:12)</em> <strong>${name}</strong> reservadamente para <strong>${people_send}</strong>: ${input}
+                <em>(${info.time})</em> <strong>${info.me}</strong> reservadamente para <strong>${info.to}</strong>: ${info.msg}
             </h6>
         </li>
-        `  
+        `
     }
-    document.querySelector("input").value = ""
+
+    return msg
 }
+
+function login(info){
+    let msg = ``
+    if(info==="in"){
+        msg = `        
+        <li>
+            <h6>
+                <em>(${info.time})</em> <strong>${info.me}</strong> Entra na sala
+            </h6>
+        </li>
+        `
+    }
+    else{
+        msg = `        
+        <li>
+            <h6>
+                <em>(${info.time})</em> <strong>${info.me}</strong> Entra na sala
+            </h6>
+        </li>
+        `
+    }
+    console.log("entrou")
+    console.log(msg)
+    return msg
+}
+
+
+
+
+function save(){
+    //const dados = {...};
+    //const requisicao = axios.post('http://...', dados);
+}
+
+in_out()
