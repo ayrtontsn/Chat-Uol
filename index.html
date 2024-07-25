@@ -4,48 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Uol</title>
-    <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    
 </head>
 <body>
-    <div class="header">
+    <header>
         <img class="imgs" src="imgs/uol.png"/>
         <ion-icon class="contacts" name="people" onclick="show_menu()"></ion-icon>
-    </div>
+    </header>
 
-    <div class="main">
-        <div class="chat all">
-            <h6 class="hour">(12:12:12)</h6>
-            <h6 class="name_chat">João</h6>
-            <h6>para</h6>
-            <h6 class="target">Todos:</h6>
-            <h6 class="post">Olá, bom dia!</h6>
-        </div>
-        <div class="chat priv">
-            <h6 class="hour">(12:12:12)</h6>
-            <h6 class="name_chat">João</h6>
-            <h6>para</h6>
-            <h6 class="target">Todos:</h6>
-            <h6 class="post">Olá, bom dia!</h6>
-        </div>
-        <div class="chat priv">
-            <h6 class="hour">(12:12:12)</h6>
-            <h6 class="name_chat">João</h6>
-            <h6>para</h6>
-            <h6 class="target">Todos:</h6>
-            <h6 class="post">Olá, bom dia!</h6>
-        </div>
-    </div>
+    <ul>
+        <li>
+            <h6>
+                <em>(12:12:12)</em> <strong>João</strong> para <strong>Todos</strong>: Olá, bom dia!
+            </h6>
+        </li>
+        <li>
+            <h6>
+                <em>(12:12:12)</em> <strong>João</strong> para <strong>Todos</strong>: Olá, bom dia!
+            </h6>
+        </li>
+        <li class="priv">
+            <h6>
+                <em>(12:12:12)</em> <strong>João</strong> para <strong>Todos</strong>: Olá, bom dia!
+            </h6>
+        </li>
+    </ul>
 
 
 
-    <div class="footer">
+    <footer>
         <div class="message">
             <input type="text" placeholder="Escreva aqui...">
             <span>Enviando para Todos (Público)</span>
         </div>
-        <ion-icon class="send" name="paper-plane-outline"></ion-icon>
-    </div>
+        <ion-icon class="send" name="paper-plane-outline" onclick="send()"></ion-icon>
+    </footer>
 
     <div class="menu hidden">
         <div class="title">

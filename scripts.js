@@ -13,3 +13,9 @@ function hidden_menu(){
     menu.classList.add("hidden")
     mask.classList.add("hidden")
 }
+
+const name = "João"
+
+function send(){
+    
+}
