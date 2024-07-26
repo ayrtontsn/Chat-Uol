@@ -4,8 +4,11 @@ let target_send = "Público";
 
 let msg_chat = [];
 let ul = document.querySelector("ul")
+let list_persons = document.querySelector(".persons")
 
 let chat={}
+
+let persons_in=[]
 
 
 function show_menu(){
@@ -36,6 +39,9 @@ function visibility(click){
 
     clicked.classList.remove("hidden")
     clicked.classList.add("select")
+
+    span_input(people_send,target_send)
+
 }
 
 function people(click){
@@ -50,6 +56,13 @@ function people(click){
 
     clicked.classList.remove("hidden")
     clicked.classList.add("select")
+
+    span_input(people_send,target_send)
+}
+
+function span_input(people,target){
+    const input = document.querySelector("span")
+    input.innerHTML = `Enviando para ${people} (${target})`
 }
 
 function send(){
@@ -76,13 +89,13 @@ function send(){
     // promessa.then(processarResposta);
 }
 
-function in_out(){
+function join(){
     today=new Date();
     clock = today.toLocaleTimeString();
    
      
     chat = {
-        type: "in_out",
+        type: "in",
         time: clock,
         me: name,
         privacity: target_send,
@@ -134,35 +147,81 @@ function Message(info){
 
 function login(info){
     let msg = ``
-    if(info==="in"){
+    if(info.type==="in"){
         msg = `        
-        <li>
+        <li class="login">
             <h6>
-                <em>(${info.time})</em> <strong>${info.me}</strong> Entra na sala
+                <em>(${info.time})</em> <strong>${info.me}</strong> entra na sala
             </h6>
         </li>
         `
     }
     else{
         msg = `        
-        <li>
+        <li class="login">
             <h6>
-                <em>(${info.time})</em> <strong>${info.me}</strong> Entra na sala
+                <em>(${info.time})</em> <strong>${info.me}</strong> sai da sala
             </h6>
         </li>
         `
     }
-    console.log("entrou")
-    console.log(msg)
     return msg
 }
-
-
-
 
 function save(){
     //const dados = {...};
     //const requisicao = axios.post('http://...', dados);
 }
 
-in_out()
+function checkin(people){
+    if(people.type === "in" || people.type === "out"){
+        return true
+    }
+}
+
+function persons(){
+    // Fazer o filtro mostrando todas as pessoas que entraram e saíram
+    const persons_in_out = msg_chat.filter(checkin);
+    persons_in=["Todos"]
+
+    for(let i=0;i<persons_in_out.length;i++){
+        let count_login=0
+        
+        
+        for(let a=0;a<persons_in_out.length;a++){
+            if(persons_in_out[i].me === persons_in_out[a].me)
+                count_login++
+        }
+        if(count_login%2===1){
+            persons_in.push(persons_in_out[i].me)
+        }      
+    }
+    return persons_in
+    
+    // Fazer um while passando por essa lista, mostrnado quantas vezes passou pelo nome
+
+    // Se par - não listar --- Se impar - Listar
+}
+
+function show_persons(){
+    persons_in = persons()
+    let msg = ""
+
+    let show_people = "";
+    
+    for(let i=0;i<persons_in.length;i++){
+        msg =
+        `   <div class="people" onclick="people(this)">
+                <div class="name_menu">                
+                    <ion-icon class="send" name="person-circle"></ion-icon>
+                    <h1>${persons_in[i]}</h1>
+                </div>
+                <ion-icon class="check hidden" name="checkmark-sharp"></ion-icon>
+            </div>`;
+    }
+
+    list_persons.innerHTML += msg
+}
+
+join()
+show_persons()
