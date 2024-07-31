@@ -1,4 +1,4 @@
-const name = "João";
+const myname = "João";
 let people_send = "Todos";
 let target_send = "Público";
 
@@ -9,6 +9,11 @@ let list_persons = document.querySelector(".persons")
 let chat={}
 
 let persons_in=[]
+
+const url = "0ebba881-9e60-4008-a4cb-97ae913eb81a";
+const msg_server = "https://mock-api.driven.com.br/api/v6/uol/messages/"+url;
+const status_server = "https://mock-api.driven.com.br/api/v6/uol/status/"+url;
+const participants_server = "https://mock-api.driven.com.br/api/v6/uol/participants/"+url;
 
 
 function show_menu(){
@@ -73,20 +78,24 @@ function send(){
    
      
     chat = {
-        type: "msg",
-        time: clock,
-        me: name,
-        privacity: target_send,
+        from: myname,
         to: people_send,
-        msg: input
+        text: input,
+        type: "message",
     }
 
     msg_chat.push(chat)
-    document.querySelector("input").value = ""
-    rendermsg()
+    document.querySelector("input").value = "";
 
-    // const promessa = axios.post('http://...', dados);
-    // promessa.then(processarResposta);
+    console.log(chat)
+    
+    const promise = axios.post(msg_server,chat);
+
+    promise.then(teste);
+}
+function teste (){
+    const request_get = axios.get(msg_server);
+    request_get.then(rendermsg);
 }
 
 function join(){
@@ -94,43 +103,63 @@ function join(){
     clock = today.toLocaleTimeString();
    
      
-    chat = {
-        type: "in",
+    /* chat = {
+        from: myname,
+        text: "entra na sala...",
         time: clock,
-        me: name,
-        privacity: target_send,
         to: people_send,
-        msg: ""
+        type: "status"
+    } */
+
+    const name = {
+        name: myname
     }
-    msg_chat.push(chat)
-    rendermsg()
+
+
+    // msg_chat.push(chat)
+
+    const promise = axios.post(participants_server,name);
+    promise.then(teste);
 }
 
-function rendermsg(){
+function rendermsg(msg){
+
+    console.log("Mensagem enviada")
     ul.innerHTML = "";
-    let msg = ""
+    // let msg = ""
+    // const promise = axios.get(msg_server)
+    // promise.then(process_msg)
+
+    msg_chat = msg.data
+
+    console.log(msg)
+    console.log(msg_chat)
     
     for(let i=0;i<msg_chat.length;i++){
-        if(msg_chat[i].type === "msg"){
-            msg = Message(msg_chat[i])
-        }
-        else{
-            msg = login(msg_chat[i])
-        }
+        msg = Message(msg_chat[i])
         ul.innerHTML += msg
     }
 }
 
 function Message(info){
     let msg = ``
-    if (info.privacity === "Público"){
+    if (info.type === "message"){
         msg = `        
                 <li>
                     <h6>
-                        <em>(${info.time})</em> <strong>${info.me}</strong> para <strong>${info.to}</strong>: ${info.msg}
+                        <em>(${info.time})</em> <strong>${info.from}</strong> para <strong>${info.to}</strong>: ${info.text}
                     </h6>
                 </li>
                 `  
+    }
+    else if(info.type==="status"){
+        msg = `        
+        <li class="login">
+            <h6>
+                <em>(${info.time})</em> <strong>${info.from}</strong> ${info.text}
+            </h6>
+        </li>
+        `
     }
     else{
         msg = `        
@@ -145,27 +174,8 @@ function Message(info){
     return msg
 }
 
-function login(info){
-    let msg = ``
-    if(info.type==="in"){
-        msg = `        
-        <li class="login">
-            <h6>
-                <em>(${info.time})</em> <strong>${info.me}</strong> entra na sala
-            </h6>
-        </li>
-        `
-    }
-    else{
-        msg = `        
-        <li class="login">
-            <h6>
-                <em>(${info.time})</em> <strong>${info.me}</strong> sai da sala
-            </h6>
-        </li>
-        `
-    }
-    return msg
+function login(){
+
 }
 
 function save(){
@@ -174,7 +184,7 @@ function save(){
 }
 
 function checkin(people){
-    if(people.type === "in" || people.type === "out"){
+    if(people.type === "status"){
         return true
     }
 }
@@ -182,7 +192,7 @@ function checkin(people){
 function persons(){
     // Fazer o filtro mostrando todas as pessoas que entraram e saíram
     const persons_in_out = msg_chat.filter(checkin);
-    persons_in=["Todos"]
+    persons_in=[]
 
     for(let i=0;i<persons_in_out.length;i++){
         let count_login=0
@@ -225,3 +235,7 @@ function show_persons(){
 
 join()
 show_persons()
+
+//while(true){
+//    setTimeout(process_request,5000);
+//}
