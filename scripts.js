@@ -1,4 +1,9 @@
-const myname = "João";
+const myname = String(prompt("Qual seu nome?"));
+const name = {
+    name: myname
+}
+
+
 let people_send = "Todos";
 let target_send = "Público";
 
@@ -7,8 +12,8 @@ let ul = document.querySelector("ul")
 let list_persons = document.querySelector(".persons")
 
 let chat={}
+let private = "message";
 
-let persons_in=[]
 
 const url = "0ebba881-9e60-4008-a4cb-97ae913eb81a";
 const msg_server = "https://mock-api.driven.com.br/api/v6/uol/messages/"+url;
@@ -72,73 +77,64 @@ function span_input(people,target){
 
 function send(){
     const input = document.querySelector("input").value
-    
-    today=new Date();
-    clock = today.toLocaleTimeString();
+
+    if(target_send === "Público"){
+        private = "message";
+    }
+    else{
+        private = "private_message";
+    }
    
-     
     chat = {
         from: myname,
         to: people_send,
         text: input,
-        type: "message",
+        type: private,
     }
 
     msg_chat.push(chat)
     document.querySelector("input").value = "";
-
-    console.log(chat)
     
     const promise = axios.post(msg_server,chat);
-
-    promise.then(teste);
+    promise.then(msg_request);
 }
-function teste (){
+
+function join(){
+    const promise = axios.post(participants_server,name);
+    promise.then(msg_request);
+    
+    setTimeout(persons_request,500)
+
+    setInterval(status_request,5000);
+    setInterval(persons_request,10000);
+    setInterval(msg_request,3000);
+}
+
+function msg_request(){
     const request_get = axios.get(msg_server);
     request_get.then(rendermsg);
 }
 
-function join(){
-    today=new Date();
-    clock = today.toLocaleTimeString();
-   
-     
-    /* chat = {
-        from: myname,
-        text: "entra na sala...",
-        time: clock,
-        to: people_send,
-        type: "status"
-    } */
+function status_request(){
+    const promise = axios.post(status_server,name);
+}
 
-    const name = {
-        name: myname
-    }
-
-
-    // msg_chat.push(chat)
-
-    const promise = axios.post(participants_server,name);
-    promise.then(teste);
+function persons_request(){
+    const request_get = axios.get(participants_server);
+    request_get.then(show_persons);
 }
 
 function rendermsg(msg){
 
-    console.log("Mensagem enviada")
     ul.innerHTML = "";
-    // let msg = ""
-    // const promise = axios.get(msg_server)
-    // promise.then(process_msg)
-
     msg_chat = msg.data
-
-    console.log(msg)
-    console.log(msg_chat)
     
     for(let i=0;i<msg_chat.length;i++){
         msg = Message(msg_chat[i])
-        ul.innerHTML += msg
+        ul.innerHTML += msg;
+        ul.scrollIntoView({ block: "end" });
     }
+    
 }
 
 function Message(info){
@@ -162,80 +158,55 @@ function Message(info){
         `
     }
     else{
-        msg = `        
-        <li class="priv">
-            <h6>
-                <em>(${info.time})</em> <strong>${info.me}</strong> reservadamente para <strong>${info.to}</strong>: ${info.msg}
-            </h6>
-        </li>
-        `
+        if(info.to === myname || info.from === myname){
+            msg = `        
+            <li class="priv">
+                <h6>
+                    <em>(${info.time})</em> <strong>${info.from}</strong> reservadamente para <strong>${info.to}</strong>: ${info.text}
+                </h6>
+            </li>
+            `
+        }
     }
-
     return msg
 }
 
-function login(){
 
+
+function Todos(){
+    aux =`
+            <div class="people" onclick="people(this)">
+                <div class="name_menu">                
+                    <ion-icon class="send" name="people"></ion-icon>
+                    <h1>Todos</h1>
+                </div>
+                <ion-icon class="check select" name="checkmark-sharp"></ion-icon>
+            </div>`;
+    return aux
 }
 
-function save(){
-    //const dados = {...};
-    //const requisicao = axios.post('http://...', dados);
-}
 
-function checkin(people){
-    if(people.type === "status"){
-        return true
+function show_persons(persons){
+    list_persons.innerHTML = Todos()
+    let persons_in = persons.data
+    if(!persons_in){
+        persons_in = ""
     }
-}
-
-function persons(){
-    // Fazer o filtro mostrando todas as pessoas que entraram e saíram
-    const persons_in_out = msg_chat.filter(checkin);
-    persons_in=[]
-
-    for(let i=0;i<persons_in_out.length;i++){
-        let count_login=0
-        
-        
-        for(let a=0;a<persons_in_out.length;a++){
-            if(persons_in_out[i].me === persons_in_out[a].me)
-                count_login++
-        }
-        if(count_login%2===1){
-            persons_in.push(persons_in_out[i].me)
-        }      
-    }
-    return persons_in
-    
-    // Fazer um while passando por essa lista, mostrnado quantas vezes passou pelo nome
-
-    // Se par - não listar --- Se impar - Listar
-}
-
-function show_persons(){
-    persons_in = persons()
-    let msg = ""
-
-    let show_people = "";
     
     for(let i=0;i<persons_in.length;i++){
-        msg =
+        
+        show_people =
         `   <div class="people" onclick="people(this)">
                 <div class="name_menu">                
                     <ion-icon class="send" name="person-circle"></ion-icon>
-                    <h1>${persons_in[i]}</h1>
+                    <h1>${persons_in[i].name}</h1>
                 </div>
                 <ion-icon class="check hidden" name="checkmark-sharp"></ion-icon>
-            </div>`;
-    }
-
-    list_persons.innerHTML += msg
+            </div>`
+        if(persons_in[i].name !== myname){
+            list_persons.innerHTML += show_people;
+        }
+    }    
 }
 
 join()
-show_persons()
-
-//while(true){
-//    setTimeout(process_request,5000);
-//}
